@@ -1,0 +1,7 @@
+# Démarche
+* Lancer le serveur wamp
+* Vérifier que la bdd est bien créée sur phpMyAdmin
+* Démarrer le serveur 
+```
+php -S localhost:3000
+```
