@@ -139,14 +139,15 @@ class _TaskListScreenState extends State<TaskListScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Liste de tâches'),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => _showAddTaskDialog(context), // Ouvrir le dialogue pour ajouter une nouvelle tâche
+            onPressed: () => _showAddTaskDialog(
+                context), // Ouvrir le dialogue pour ajouter une nouvelle tâche
           ),
         ],
       ),
@@ -157,35 +158,44 @@ class _TaskListScreenState extends State<TaskListScreen> {
               itemBuilder: (context, index) {
                 final task = tasks[index];
                 return Card(
-                  child: ListTile(
-                    title: Text(task.title),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(task.description),
-                        Text('Statut : ${task.status}'),
-                        Text('Date limite : ${task.dueDate}'),
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => _showEditTaskDialog(context, task), // Modifier la tâche
+                  child: ExpansionTile(
+                    title: Text(task
+                        .title), // Le titre de la tâche est toujours visible
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0), 
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start, // Les détails de la tâche sont cachés
+                          children: [
+                            Text('Description: ${task.description}'),
+                            Text('Statut: ${task.status}'),
+                            Text('Date limite: ${task.dueDate}'),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end, // Les boutons d'action sont alignés à droite
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () => _showEditTaskDialog(
+                                      context, task), // Modifier la tâche
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () =>
+                                      deleteTask(task.id), // Supprimer la tâche
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () => deleteTask(task.id), // Supprimer la tâche
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               },
             ),
     );
   }
+
 
   // Boîte de dialogue pour ajouter une nouvelle tâche
   Future<void> _showAddTaskDialog(BuildContext context) async {
