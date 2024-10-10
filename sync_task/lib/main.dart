@@ -242,7 +242,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   }
 
   // Boîte de dialogue pour modifier une tâche
-  Future<void> _showEditTaskDialog(BuildContext context, Task task) async {
+Future<void> _showEditTaskDialog(BuildContext context, Task task) async {
     String title = task.title;
     String description = task.description;
     String status = task.status;
@@ -253,7 +253,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
       builder: (context) {
         return AlertDialog(
           title: Text('Modifier la tâche'),
-          content: Column(
+          content: SingleChildScrollView(
+            child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
@@ -271,14 +272,40 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 onChanged: (value) => dueDate = value,
                 controller: TextEditingController(text: task.dueDate),
               ),
+                DropdownButtonFormField<String>(
+                  value: status,
+                  decoration: InputDecoration(labelText: 'Statut'),
+                  items: [
+                    DropdownMenuItem(
+                      value: 'En attente',
+                      child: Text('En attente'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'En cours',
+                      child: Text('En cours'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Terminée',
+                      child: Text('Terminée'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        status = value;
+                      });
+                    }
+                  },
+                ),
             ],
+          ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text('Annuler'),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 final updatedTask = Task(
                   id: task.id,
